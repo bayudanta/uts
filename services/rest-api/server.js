@@ -2,8 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const userRoutes = require('./routes/users');
 const { errorHandler } = require('./middleware/errorHandler');
+
+// Impor rute baru
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
+const teamRoutes = require('./routes/team.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -27,13 +31,19 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
-    service: 'REST API Service',
+    service: 'User Service (REST)',
     timestamp: new Date().toISOString()
   });
 });
 
-// Routes
+// --- Rute ---
+// Rute publik untuk autentikasi
+app.use('/auth', authRoutes); 
+
+// Rute API (Gateway akan memproteksi ini)
 app.use('/api/users', userRoutes);
+app.use('/api/teams', teamRoutes);
+
 
 // Error handling middleware
 app.use(errorHandler);
@@ -47,8 +57,8 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 REST API Service running on port ${PORT}`);
-  console.log(`📋 Health check: http://localhost:${PORT}/health`);
+  console.log(`🚀 User Service (REST) running on port ${PORT}`);
+  console.log(`🔑 Public Key Endpoint: http://localhost:${PORT}/auth/public-key`);
 });
 
 module.exports = app;

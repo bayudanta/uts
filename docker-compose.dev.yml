@@ -2,7 +2,7 @@
 version: '3.8'
 
 services:
-  # REST API Service
+  # User Service (REST)
   rest-api:
     build: ./services/rest-api
     ports:
@@ -17,7 +17,7 @@ services:
     networks:
       - microservices-network
 
-  # GraphQL API Service
+  # Task Service (GraphQL)
   graphql-api:
     build: ./services/graphql-api
     ports:
@@ -39,8 +39,8 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - REST_API_URL=http://rest-api:3001
-      - GRAPHQL_API_URL=http://graphql-api:4000
+      - USER_SERVICE_URL=http://rest-api:3001
+      - TASK_SERVICE_URL=http://graphql-api:4000
       - NODE_ENV=development
     depends_on:
       - rest-api
@@ -54,14 +54,15 @@ services:
 
   # Frontend Application
   frontend-app:
-    build: 
+    build:
       context: ./frontend-app
       target: deps
     ports:
       - "3002:3000"
     environment:
       - NEXT_PUBLIC_API_GATEWAY_URL=http://localhost:3000
-      - NEXT_PUBLIC_GRAPHQL_URL=http://localhost:4000/graphql
+      - NEXT_PUBLIC_GRAPHQL_URL=http://localhost:3000/graphql
+      - NEXT_PUBLIC_GRAPHQL_WS_URL=ws://localhost:3000/graphql
     depends_on:
       - api-gateway
     volumes:

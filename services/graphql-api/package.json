@@ -1,7 +1,7 @@
 {
-  "name": "graphql-api",
+  "name": "task-service-graphql",
   "version": "1.0.0",
-  "description": "GraphQL API service with queries, mutations, and subscriptions",
+  "description": "GraphQL API service for tasks and notifications",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -20,7 +20,12 @@
   "devDependencies": {
     "nodemon": "^2.0.22"
   },
-  "keywords": ["graphql", "apollo", "subscriptions"],
+  "keywords": [
+    "graphql",
+    "apollo",
+    "subscriptions",
+    "tasks"
+  ],
   "author": "",
   "license": "ISC"
 }
